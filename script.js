@@ -7,6 +7,7 @@ let dropdownBtn = document.querySelector('.gridnumber');
 
 
 makeGridBySides(4);
+
 function makeGridBySides(strOfSquares) {
     clearGridSquares();
     let numberOfSquares = parseInt(strOfSquares);
@@ -21,19 +22,31 @@ function makeGridBySides(strOfSquares) {
         divArray[i].addEventListener('mouseenter', () => {
             divArray[i].style.backgroundColor = "red"}
         );
+        /*
         divArray[i].addEventListener('mouseleave', () => {
             divArray[i].style.backgroundColor = "white"}
         );
-        
+        */
         
         container.appendChild(divArray[i]);
     }
+    resetSquareStyle();
 }
 
 function clearGridSquares() {
+    resetGrid();
+    resetSquareStyle();
+}
+
+function resetSquareStyle() {
+    let divArray = container.querySelectorAll('div');
+    divArray.forEach((div)=>{div.style.backgroundColor = "white"});
+}
+function resetGrid() {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
 }
+
 
 enterBtn.addEventListener('click',()=>{makeGridBySides(dropdownBtn.value)});
