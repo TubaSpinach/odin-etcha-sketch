@@ -89,7 +89,6 @@ function padGridStateString(state_str) {
 
         if(i<grid_side_length){
             padded_string += '0' + state_str.slice(grid_side_length*i,grid_side_length*(i+1)) + '0';
-            console.log(`${padded_string}`)
         }
         
     }
@@ -97,10 +96,56 @@ function padGridStateString(state_str) {
     
     return padded_string
 }
-function evolveGridState(state_str) {
 
+function unPadGridStateString(padded_str) {
+    let raw_str = '';
+    let padded_row_length = grid_side_length+2
+    for(let i = 0; i < grid_side_length+1; i++){
+        raw_str += i > 0 ? padded_str.slice(i*(padded_row_length)+1,i*padded_row_length+grid_side_length+1) : '';
+    }
+
+    return raw_str;
+}
+function evolveGridState(state_str) {
+    let padded_state = padGridStateString(state_str);
+    let padded_side_length = grid_side_length + 2;
+    let evolved_state = '';
+
+    for(let i = 0; i<padded_state.length;i++){
+        if((i>=0 && i<padded_side_length) || (i>=padded_side_length*(padded_side_length-1) && i<padded_state.length) 
+                || (i%padded_side_length == 0) || (i%padded_side_length == padded_side_length-1)){
+            evolved_state += '0';
+        } else {
+            neighborhood_of_ith_cell = [padded_state.charAt(i-padded_side_length-1),padded_state.charAt(i-padded_side_length),padded_state.charAt(i-padded_side_length+1),
+                                        padded_state.charAt(i-1),padded_state.charAt(i),padded_state.charAt(i+1),
+                                        padded_state.charAt(i+padded_side_length-1),padded_state.charAt(i+padded_side_length),padded_state.charAt(i+padded_side_length+1)];
+            
+            let pop_value = evaluateNeighborhood(neighborhood_of_ith_cell);
+            let current_cell = padded_state.charAt(i);
+
+            if(current_cell==='0'){
+                evolved_state += pop_value == 3 ? '1' : current_cell;
+            } else {
+                evolved_state += pop_value < 2 ? '0' : pop_value > 3 ? '0' : current_cell;
+            }
+                                    
+        }
+    }
+
+    return evolved_state;
 }
 
+function evaluateNeighborhood(neighborhood){
+    let answer = 0
+    neighborhood.forEach(function (value,currIndex) {
+        if(currIndex == 4){
+            answer += 0;
+        } else {
+            answer += parseInt(value);
+        }
+    })
+    return answer;
+}
 clearBtn.addEventListener('click',()=>{resetSquareStyle()});
 enterBtn.addEventListener('click',()=>{makeGridBySides(dropdownBtn.value)});
 dropdownBtn.addEventListener('keypress',function (e) {
