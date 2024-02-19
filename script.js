@@ -10,6 +10,9 @@ let grid_side_length = 4;
 let active_color = "red";
 let inactive_color = "white";
 
+let running;
+let toggle = false;
+let delta_t = 250;
 
 
 
@@ -32,12 +35,12 @@ function makeGridBySides(strOfSquares) {
         divArray[i].style.width = `${.9*gridPercentage}%`;
         divArray[i].style.height = `${.9*gridPercentage}%`;
         */
-        divArray[i].addEventListener('mouseenter', () => {
+        divArray[i].addEventListener('click', () => {
             divArray[i].style.backgroundColor = active_color}
         );
         /*
         divArray[i].addEventListener('mouseleave', () => {
-            divArray[i].style.backgroundColor = active_color}
+            divArray[i].style.backgroundColor = inactive_color}
         );
         */
         
@@ -150,6 +153,17 @@ function evaluateNeighborhood(neighborhood){
     })
     return answer;
 }
+
+function runGame(){
+    running = setInterval(()=>{
+        decodeStringAsGridState(evolveGridState(encodeGridStateAsString()));
+    },delta_t)
+    
+}
+function stopGame(){
+    clearInterval(running)
+}
+
 clearBtn.addEventListener('click',()=>{resetSquareStyle()});
 enterBtn.addEventListener('click',()=>{makeGridBySides(dropdownBtn.value)});
 dropdownBtn.addEventListener('keypress',function (e) {
