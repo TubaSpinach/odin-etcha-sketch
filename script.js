@@ -1,8 +1,11 @@
 let divArray = [];
+
 let container = document.querySelector('#container');
 let enterBtn = document.querySelector('.enter');
 let dropdownBtn = document.querySelector('.gridnumber');
 let clearBtn = document.querySelector('.clear');
+let evolveBtn = document.querySelector('.evolve');
+
 let grid_side_length = 4;
 let active_color = "red";
 let inactive_color = "white";
@@ -106,6 +109,7 @@ function unPadGridStateString(padded_str) {
 
     return raw_str;
 }
+
 function evolveGridState(state_str) {
     let padded_state = padGridStateString(state_str);
     let padded_side_length = grid_side_length + 2;
@@ -132,7 +136,7 @@ function evolveGridState(state_str) {
         }
     }
 
-    return evolved_state;
+    return unPadGridStateString(evolved_state);
 }
 
 function evaluateNeighborhood(neighborhood){
@@ -156,3 +160,6 @@ dropdownBtn.addEventListener('keypress',function (e) {
     }
     
 );
+evolveBtn.addEventListener('click',()=>{
+    decodeStringAsGridState(evolveGridState(encodeGridStateAsString()))
+});
